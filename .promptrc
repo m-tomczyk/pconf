@@ -1,0 +1,51 @@
+#!/dev/null
+# Config here
+PLACE_RGB=${PLACE_RGB:-'15;51;20'}
+DIR_RGB=${DIR_RGB:-'41;89;48'}
+GIT_RGB=${GIT_RGB:-'180;92;54'}
+PROMPT_RGB=${PROMPT_RGB:-'83;132;90'}
+
+ENABLE_GIT=${ENABLE_GIT:-true}
+GIT_DIR=${GIT_DIR:-"$(pwd)/.config/pconf/.gitrc"}
+
+# Internals from here
+if [ "$color_prompt" = yes ]; then
+
+    PROMPT_COMMAND="PLACE='2;${PLACE_RGB}';"
+    PROMPT_COMMAND+="DIR='2;${DIR_RGB}';"
+    PROMPT_COMMAND+="GIT='2;${GIT_RGB}';"
+    PROMPT_COMMAND+="PROMPT='2;${PROMPT_RGB}';"
+    PROMPT_COMMAND+="FONT='5;230';"
+    if [ "$ENABLE_GIT" = true ] ; then
+        source "$GIT_DIR"
+        PROMPT_COMMAND+='PS1_CMD1=$(__git_ps1 " ⎇ (%s)");';
+    fi
+
+    PS1='${debian_chroot:+($debian_chroot)}'
+    # Place
+    PS1+='\[\e[1;48;${PLACE};38;${FONT}m\] \u@\H'
+    # Directory
+    PS1+='\[\e[1;38;${PLACE};48;${DIR}m\]\[\e[1;38;${FONT};48;${DIR}m\] 🗀  \w'
+    # GIT
+    if [ "$ENABLE_GIT" = true ] ; then
+        PS1+='\[\e[1;38;${DIR};48;${GIT}m\]\[\e[1;38;${FONT};48;${GIT}m\]${PS1_CMD1}'
+    fi
+    # Prompt sign
+    if [ "$ENABLE_GIT" = true ] ; then
+      PS1+='\[\e[1;38;${GIT};48;${PROMPT}m\]'
+    else
+      PS1+='\[\e[1;38;${DIR};48;${PROMPT}m\]'
+    fi
+    PS1+='\[\e[1;38;${FONT};48;${PROMPT}m\] \$\[\e[0m\]\[\e[1;38;${PROMPT}m\]\[\e[0m\] '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+
+# Cleanup
+unset -f create_prompt
+unset PLACE_RGB
+unset DIR_RGB
+unset GIT_RGB
+unset PROMPT_RGB
+unset ENABLE_GIT
+unset GIT_DIR
