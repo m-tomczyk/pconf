@@ -23,6 +23,8 @@ alias du='du -ch'
 
 # Docker
 alias dps='docker ps'
+alias dlog="docker ps -a --format '{{.Names}}' | fzf --preview 'docker logs -n 50 {}' --preview-window 'right,75%' | xargs -or docker logs -f"
 
-# yalc
+# node/yarn/yalc
+alias rmnm='rm -rf node_modules/'
 alias yra='yalc remove --all'
