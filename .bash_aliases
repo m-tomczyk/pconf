@@ -3,6 +3,9 @@
 alias ll='ls -alFh'
 alias la='ls -A'
 alias l='ls -CF'
+alias ll.='ll ../'
+alias ll..='ll ../../'
+alias ll...='ll ../../../'
 
 # Easier navigation
 alias cd..='cd ..'
